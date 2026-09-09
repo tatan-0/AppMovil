@@ -76,7 +76,7 @@ class RegisterActivity : AppCompatActivity() {
                     .setContentText("El usuario ha sido registrado. Redirigiendo al Login.")
                     .setConfirmClickListener { dialog ->
                         dialog.dismissWithAnimation()
-                        finish() // Retorna a la pantalla anterior (Login)
+                        finish()
                     }
                     .show()
             } else {

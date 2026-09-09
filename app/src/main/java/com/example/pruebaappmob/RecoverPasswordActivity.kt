@@ -79,7 +79,7 @@ class RecoverPasswordActivity : AppCompatActivity() {
                 .setContentText("Su clave ha sido modificada con éxito.")
                 .setConfirmClickListener { dialog ->
                     dialog.dismissWithAnimation()
-                    finish() // Cierra la actividad y vuelve al Login
+                    finish()
                 }
                 .show()
         }
