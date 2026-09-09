@@ -68,7 +68,7 @@ class UserListActivity : AppCompatActivity() {
         val userNames = displayedUsers.mapIndexed { index, user ->
             "${index + 1}. ${user.nombres} ${user.apellidos}"
         }
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, userNames)
+        adapter = ArrayAdapter(this, R.layout.item_user, userNames)
         lvUsers.adapter = adapter
     }
 

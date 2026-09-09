@@ -16,8 +16,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="16dp"
-            android:src="@mipmap/ic_launcher"
-            android:contentDescription="Logo" />
+            android:contentDescription="Logo"
+            android:src="@drawable/logo_ina" />
 
         <TextView
             android:layout_width="wrap_content"

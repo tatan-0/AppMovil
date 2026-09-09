@@ -23,6 +23,8 @@
         android:hint="INGRESE NOMBRES"
         android:paddingHorizontal="12dp"
         android:background="@android:drawable/editbox_background"
+        android:textColor="#000000"
+        android:textColorHint="#777777"
         android:layout_marginBottom="10dp" />
 
     <EditText
@@ -32,6 +34,8 @@
         android:hint="INGRESE APELLIDOS"
         android:paddingHorizontal="12dp"
         android:background="@android:drawable/editbox_background"
+        android:textColor="#000000"
+        android:textColorHint="#777777"
         android:layout_marginBottom="10dp" />
 
     <EditText
@@ -42,6 +46,8 @@
         android:inputType="textEmailAddress"
         android:paddingHorizontal="12dp"
         android:background="@android:drawable/editbox_background"
+        android:textColor="#000000"
+        android:textColorHint="#777777"
         android:layout_marginBottom="20dp" />
 
     <LinearLayout

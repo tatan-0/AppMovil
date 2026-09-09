@@ -16,7 +16,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="16dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/logo_ina"
             android:contentDescription="Logo" />
 
         <TextView
@@ -37,6 +37,8 @@
             android:inputType="textPersonName"
             android:paddingHorizontal="16dp"
             android:background="@android:drawable/editbox_background"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
             android:layout_marginBottom="12dp" />
 
         <EditText
@@ -47,6 +49,8 @@
             android:inputType="textPersonName"
             android:paddingHorizontal="16dp"
             android:background="@android:drawable/editbox_background"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
             android:layout_marginBottom="12dp" />
 
         <EditText
@@ -57,6 +61,8 @@
             android:inputType="textEmailAddress"
             android:paddingHorizontal="16dp"
             android:background="@android:drawable/editbox_background"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
             android:layout_marginBottom="12dp" />
 
         <EditText
@@ -67,6 +73,8 @@
             android:inputType="textPassword"
             android:paddingHorizontal="16dp"
             android:background="@android:drawable/editbox_background"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
             android:layout_marginBottom="12dp" />
 
         <EditText
@@ -77,6 +85,8 @@
             android:inputType="textPassword"
             android:paddingHorizontal="16dp"
             android:background="@android:drawable/editbox_background"
+            android:textColor="#000000"
+            android:textColorHint="#777777"
             android:layout_marginBottom="24dp" />
 
         <Button
