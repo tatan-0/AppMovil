@@ -1,13 +1,17 @@
 package com.example.pruebaappmob
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 
 class RecoverPasswordActivity : AppCompatActivity() {
+
+    private var countDownTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,6 +19,7 @@ class RecoverPasswordActivity : AppCompatActivity() {
 
         val etEmail = findViewById<EditText>(R.id.etRecoverEmail)
         val btnRecover = findViewById<Button>(R.id.btnRecover)
+        val tvTimer = findViewById<TextView>(R.id.tvTimer)
 
         val etNewPass = findViewById<EditText>(R.id.etNewPass)
         val etRepeatPass = findViewById<EditText>(R.id.etRepeatPass)
@@ -38,10 +43,22 @@ class RecoverPasswordActivity : AppCompatActivity() {
                     .show()
                 return@setOnClickListener
             }
+            
+            countDownTimer?.cancel()
+            countDownTimer = object : CountDownTimer(59000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val seconds = millisUntilFinished / 1000
+                    tvTimer.text = "$seconds Segundos"
+                }
+
+                override fun onFinish() {
+                    tvTimer.text = "0 Segundos (Expirado)"
+                }
+            }.start()
 
             SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("Solicitud Enviada")
-                .setContentText("Se ha validado el correo. Ingrese su nueva clave a continuación.")
+                .setTitleText("Código Enviado")
+                .setContentText("Se ha enviado el código a su correo. Puede proceder a ingresar la nueva clave.")
                 .show()
         }
 
@@ -69,7 +86,7 @@ class RecoverPasswordActivity : AppCompatActivity() {
             if (!pass1.matches(Regex(passwordRegex))) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Contraseña Débil")
-                    .setContentText("La clave debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial.")
+                    .setContentText("Mínimo 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial.")
                     .show()
                 return@setOnClickListener
             }
@@ -83,5 +100,10 @@ class RecoverPasswordActivity : AppCompatActivity() {
                 }
                 .show()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer?.cancel()
     }
 }
