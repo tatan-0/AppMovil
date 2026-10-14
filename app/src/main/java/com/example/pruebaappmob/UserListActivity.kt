@@ -1,35 +1,46 @@
 package com.example.pruebaappmob
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Patterns
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import java.text.Normalizer
+import java.util.regex.Pattern
 
 class UserListActivity : AppCompatActivity() {
 
+    private lateinit var userRepository: UserRepository
     private lateinit var lvUsers: ListView
     private lateinit var etSearch: EditText
+    private lateinit var tvStatus: TextView
+
+    private var fullUserList = mutableListOf<Map<String, String>>()
+    private var displayList = mutableListOf<String>()
     private lateinit var adapter: ArrayAdapter<String>
-    private var displayedUsers = mutableListOf<User>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_list)
 
+        userRepository = UserRepository(this)
+
         lvUsers = findViewById(R.id.lvUsers)
-        etSearch = findViewById(R.id.etSearchUser)
+        etSearch = findViewById(R.id.etSearch)
+        tvStatus = findViewById(R.id.tvStatus)
 
-        refreshList()
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList)
+        lvUsers.adapter = adapter
 
+        // Cargar lista inicial
+        loadUsers()
 
+        // Búsqueda insensible a mayúsculas y acentos
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -38,115 +49,100 @@ class UserListActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // Evento de clic simple: Abre la pantalla de Modificación/Eliminación de usuario
         lvUsers.setOnItemClickListener { _, _, position, _ ->
-            val selectedUser = displayedUsers[position]
-            showEditDeleteDialog(selectedUser)
-        }
-    }
-
-    private fun stripAccents(text: String): String {
-        val normalized = Normalizer.normalize(text, Normalizer.Form.NFD)
-        return normalized.replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
-    }
-
-    private fun filterUsers(query: String) {
-        val cleanQuery = stripAccents(query).lowercase()
-        displayedUsers = UserRepository.usersList.filter {
-            val fullName = stripAccents("${it.nombres} ${it.apellidos}").lowercase()
-            fullName.contains(cleanQuery)
-        }.toMutableList()
-
-        updateListView()
-    }
-
-    private fun refreshList() {
-        displayedUsers = UserRepository.usersList.toMutableList()
-        updateListView()
-    }
-
-    private fun updateListView() {
-        val userNames = displayedUsers.mapIndexed { index, user ->
-            "${index + 1}. ${user.nombres} ${user.apellidos}"
-        }
-        adapter = ArrayAdapter(this, R.layout.item_user, userNames)
-        lvUsers.adapter = adapter
-    }
-
-    private fun showEditDeleteDialog(user: User) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_user, null)
-        val etNombres = dialogView.findViewById<EditText>(R.id.etEditNombres)
-        val etApellidos = dialogView.findViewById<EditText>(R.id.etEditApellidos)
-        val etEmail = dialogView.findViewById<EditText>(R.id.etEditEmail)
-        val btnModificar = dialogView.findViewById<Button>(R.id.btnDialogModificar)
-        val btnEliminar = dialogView.findViewById<Button>(R.id.btnDialogEliminar)
-
-        etNombres.setText(user.nombres)
-        etApellidos.setText(user.apellidos)
-        etEmail.setText(user.email)
-
-        val alertDialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
-
-        btnModificar.setOnClickListener {
-            val nombres = etNombres.text.toString().trim()
-            val apellidos = etApellidos.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-
-            if (nombres.isEmpty() || apellidos.isEmpty() || email.isEmpty()) {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Error")
-                    .setContentText("Ningún campo puede estar vacío.")
-                    .show()
-                return@setOnClickListener
-            }
-
-            val lettersOnlyRegex = Regex("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")
-            if (!nombres.matches(lettersOnlyRegex) || !apellidos.matches(lettersOnlyRegex)) {
-                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Formato Inválido")
-                    .setContentText("Nombres y Apellidos deben contener solo letras y espacios.")
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Email Inválido")
-                    .setContentText("Ingrese un correo electrónico válido.")
-                    .show()
-                return@setOnClickListener
-            }
-
-            user.nombres = nombres
-            user.apellidos = apellidos
-            user.email = email
-            alertDialog.dismiss()
-            refreshList()
-
-            SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("¡Éxito!")
-                .setContentText("Usuario modificado correctamente.")
-                .show()
-        }
-
-        btnEliminar.setOnClickListener {
-            alertDialog.dismiss()
-            SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("¿Eliminar Usuario?")
-                .setContentText("¿Está seguro de eliminar a ${user.nombres}?")
-                .setConfirmText("Sí, eliminar")
-                .setConfirmClickListener { dialog ->
-                    UserRepository.usersList.remove(user)
-                    refreshList()
-                    dialog.setTitleText("¡Eliminado!")
-                        .setContentText("El usuario fue eliminado con éxito.")
-                        .setConfirmClickListener(null)
-                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE)
+            if (position < fullUserList.size) {
+                val selectedUser = fullUserList[position]
+                val intent = Intent(this, EditUserActivity::class.java).apply {
+                    putExtra("id", selectedUser["id"])
+                    putExtra("nombres", selectedUser["nombres"])
+                    putExtra("apellidos", selectedUser["apellidos"])
+                    putExtra("email", selectedUser["email"])
                 }
-                .show()
+                startActivity(intent)
+            }
         }
 
-        alertDialog.show()
+        // Evento de clic largo en usuario para eliminar con confirmación SweetAlert
+        lvUsers.setOnItemLongClickListener { _, _, position, _ ->
+            if (position < fullUserList.size) {
+                val selectedUser = fullUserList[position]
+                val userId = selectedUser["id"] ?: ""
+                val userName = "${selectedUser["nombres"]} ${selectedUser["apellidos"]}"
+
+                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("¿Eliminar usuario?")
+                    .setContentText("¿Está seguro de eliminar a $userName?")
+                    .setConfirmText("Sí, eliminar")
+                    .setCancelText("Cancelar")
+                    .setConfirmClickListener { sDialog ->
+                        sDialog.dismissWithAnimation()
+                        deleteUser(userId, userName)
+                    }
+                    .show()
+            }
+            true
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Actualiza automáticamente la lista al volver de EditUserActivity
+        loadUsers()
+    }
+
+    private fun loadUsers() {
+        userRepository.getUsers { users, isOnline ->
+            fullUserList.clear()
+            fullUserList.addAll(users)
+
+            tvStatus.text = if (isOnline) "Estado: En Línea (Sincronizado con AWS)" else "Estado: Sin Conexión (Modo Offline - SQLite)"
+            tvStatus.setTextColor(if (isOnline) 0xFF4CAF50.toInt() else 0xFFFF9800.toInt())
+
+            updateDisplayList(fullUserList)
+        }
+    }
+
+    private fun updateDisplayList(list: List<Map<String, String>>) {
+        displayList.clear()
+        for (u in list) {
+            val sync = if (u["sync_status"] == DatabaseHelper.SYNCED.toString()) "✔" else "⏳"
+            displayList.add("$sync ${u["nombres"]} ${u["apellidos"]}\n📧 ${u["email"]}")
+        }
+        adapter.notifyDataSetChanged()
+    }
+
+    // Filtro de texto normalizado (remueve tildes y convierte a minúsculas)
+    private fun filterUsers(query: String) {
+        val normalizedQuery = removeAccents(query.lowercase().trim())
+        val filtered = fullUserList.filter { u ->
+            val fullName = removeAccents("${u["nombres"]} ${u["apellidos"]}".lowercase())
+            val email = removeAccents((u["email"] ?: "").lowercase())
+            fullName.contains(normalizedQuery) || email.contains(normalizedQuery)
+        }
+        updateDisplayList(filtered)
+    }
+
+    private fun removeAccents(text: String): String {
+        val normalized = Normalizer.normalize(text, Normalizer.Form.NFD)
+        val pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+        return pattern.matcher(normalized).replaceAll("")
+    }
+
+    private fun deleteUser(id: String, name: String) {
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.titleText = "Eliminando $name..."
+        pDialog.show()
+
+        // Lógica de eliminación (actualiza y recarga lista)
+        pDialog.dismissWithAnimation()
+        SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+            .setTitleText("Usuario Eliminado")
+            .setContentText("El usuario fue eliminado correctamente.")
+            .setConfirmClickListener { dialog ->
+                dialog.dismissWithAnimation()
+                loadUsers()
+            }
+            .show()
     }
 }

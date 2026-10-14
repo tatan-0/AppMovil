@@ -11,15 +11,23 @@ class UserManagementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_management)
 
-        val btnIngresar = findViewById<Button>(R.id.btnIngresarUsuario)
-        val btnListar = findViewById<Button>(R.id.btnListarUsuarios)
+        val btnGoToRegister = findViewById<Button>(R.id.btnGoToRegister)
+        val btnGoToList = findViewById<Button>(R.id.btnGoToList)
+        val btnBackMenu = findViewById<Button>(R.id.btnBackMenu)
 
-        btnIngresar.setOnClickListener {
+        // Abre la pantalla de Formulario de Registro
+        btnGoToRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        btnListar.setOnClickListener {
+        // Abre la pantalla de Listado de Usuarios
+        btnGoToList.setOnClickListener {
             startActivity(Intent(this, UserListActivity::class.java))
+        }
+
+        // Regresa al Menú Principal
+        btnBackMenu.setOnClickListener {
+            finish()
         }
     }
 }

@@ -12,14 +12,24 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 class RecoverPasswordActivity : AppCompatActivity() {
 
     private var countDownTimer: CountDownTimer? = null
+    private lateinit var userRepository: UserRepository
+    private var generatedCode: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recover_password)
 
+        userRepository = UserRepository(this)
+
         val etEmail = findViewById<EditText>(R.id.etRecoverEmail)
         val btnRecover = findViewById<Button>(R.id.btnRecover)
         val tvTimer = findViewById<TextView>(R.id.tvTimer)
+
+        val etCode1 = findViewById<EditText>(R.id.etCode1)
+        val etCode2 = findViewById<EditText>(R.id.etCode2)
+        val etCode3 = findViewById<EditText>(R.id.etCode3)
+        val etCode4 = findViewById<EditText>(R.id.etCode4)
+        val etCode5 = findViewById<EditText>(R.id.etCode5)
 
         val etNewPass = findViewById<EditText>(R.id.etNewPass)
         val etRepeatPass = findViewById<EditText>(R.id.etRepeatPass)
@@ -28,77 +38,105 @@ class RecoverPasswordActivity : AppCompatActivity() {
         btnRecover.setOnClickListener {
             val email = etEmail.text.toString().trim()
 
-            if (email.isEmpty()) {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Campo Obligatorio")
-                    .setContentText("Ingrese un correo electrónico.")
-                    .show()
-                return@setOnClickListener
-            }
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("Email Inválido")
-                    .setContentText("El formato del correo ingresado no es válido.")
+                    .setTitleText("Correo Inválido")
+                    .setContentText("Ingrese un correo válido para recuperar su cuenta.")
                     .show()
                 return@setOnClickListener
             }
-            
-            countDownTimer?.cancel()
-            countDownTimer = object : CountDownTimer(59000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val seconds = millisUntilFinished / 1000
-                    tvTimer.text = "$seconds Segundos"
-                }
 
-                override fun onFinish() {
-                    tvTimer.text = "0 Segundos (Expirado)"
-                }
-            }.start()
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+            pDialog.titleText = "Generando código..."
+            pDialog.show()
 
-            SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("Código Enviado")
-                .setContentText("Se ha enviado el código a su correo. Puede proceder a ingresar la nueva clave.")
-                .show()
+            userRepository.requestRecoveryCode(email,
+                onSuccess = { msg, code ->
+                    pDialog.dismissWithAnimation()
+                    generatedCode = code
+
+                    if (code.length == 5) {
+                        etCode1.setText(code[0].toString())
+                        etCode2.setText(code[1].toString())
+                        etCode3.setText(code[2].toString())
+                        etCode4.setText(code[3].toString())
+                        etCode5.setText(code[4].toString())
+                    }
+
+                    countDownTimer?.cancel()
+                    countDownTimer = object : CountDownTimer(59000, 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            tvTimer.text = "${millisUntilFinished / 1000} Segundos"
+                        }
+
+                        override fun onFinish() {
+                            tvTimer.text = "0 Segundos (Expirado)"
+                            generatedCode = ""
+                        }
+                    }.start()
+
+                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Código Generado")
+                        .setContentText("$msg\n\nCódigo de prueba: $code")
+                        .show()
+                },
+                onError = { error ->
+                    pDialog.dismissWithAnimation()
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText(error)
+                        .show()
+                }
+            )
         }
 
         btnCreatePass.setOnClickListener {
+            val email = etEmail.text.toString().trim()
             val pass1 = etNewPass.text.toString().trim()
             val pass2 = etRepeatPass.text.toString().trim()
+            val inputCode = "${etCode1.text}${etCode2.text}${etCode3.text}${etCode4.text}${etCode5.text}"
 
-            if (pass1.isEmpty() || pass2.isEmpty()) {
+            if (email.isEmpty() || pass1.isEmpty() || pass2.isEmpty() || inputCode.length < 5) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Campos Obligatorios")
-                    .setContentText("Complete ambos campos de contraseña.")
+                    .setTitleText("Campos Incompletos")
+                    .setContentText("Complete el correo, código y contraseñas.")
                     .show()
                 return@setOnClickListener
             }
 
             if (pass1 != pass2) {
                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("No coinciden")
-                    .setContentText("Las contraseñas ingresadas no son iguales.")
+                    .setTitleText("Sin coincidencia")
+                    .setContentText("Las contraseñas no coinciden.")
                     .show()
                 return@setOnClickListener
             }
 
-            val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&.#\\-_])[A-Za-z\\d@$!%*?&.#\\-_]{8,}$"
-            if (!pass1.matches(Regex(passwordRegex))) {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Contraseña Débil")
-                    .setContentText("Mínimo 8 caracteres, 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial.")
-                    .show()
-                return@setOnClickListener
-            }
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+            pDialog.titleText = "Actualizando clave..."
+            pDialog.show()
 
-            SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("¡Contraseña Actualizada!")
-                .setContentText("Su clave ha sido modificada con éxito.")
-                .setConfirmClickListener { dialog ->
-                    dialog.dismissWithAnimation()
-                    finish()
+            userRepository.resetPassword(email, pass1,
+                onSuccess = { msg ->
+                    pDialog.dismissWithAnimation()
+                    countDownTimer?.cancel()
+                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("¡Éxito!")
+                        .setContentText(msg)
+                        .setConfirmClickListener { dialog ->
+                            dialog.dismissWithAnimation()
+                            finish()
+                        }
+                        .show()
+                },
+                onError = { error ->
+                    pDialog.dismissWithAnimation()
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText(error)
+                        .show()
                 }
-                .show()
+            )
         }
     }
 

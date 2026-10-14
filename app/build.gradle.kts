@@ -49,6 +49,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("com.airbnb.android:lottie:6.3.0")
-
     implementation("com.github.f0ris.sweetalert:library:1.6.2")
+
+    // Volley para la API HTTP
+    implementation("com.android.volley:volley:1.2.1")
 }

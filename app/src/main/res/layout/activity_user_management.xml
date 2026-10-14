@@ -4,43 +4,47 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center_horizontal"
-    android:background="#FFFFFF">
-
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/logo_ina"
-        android:contentDescription="Logo" />
+    android:gravity="center"
+    android:background="#F5F5F5">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GESTIÓN DE USUARIOS"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#333333"
-        android:layout_marginTop="24dp"
+        android:textColor="#1976D2"
         android:layout_marginBottom="32dp" />
 
+    <!-- Opción 1: Formulario de Registro -->
     <Button
-        android:id="@+id/btnIngresarUsuario"
+        android:id="@+id/btnGoToRegister"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:text="INGRESAR USUARIOS"
-        android:backgroundTint="#E53935"
-        android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:backgroundTint="#1976D2"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="20dp" />
 
+    <!-- Opción 2: Lista y Búsqueda de Usuarios -->
     <Button
-        android:id="@+id/btnListarUsuarios"
+        android:id="@+id/btnGoToList"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="LISTAR USUARIOS"
+        android:textStyle="bold"
+        android:backgroundTint="#009688"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Volver al Menú Principal -->
+    <Button
+        android:id="@+id/btnBackMenu"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="LISTAR USUARIOS"
-        android:backgroundTint="#37474F"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:text="VOLVER AL MENÚ PRINCIPAL"
+        android:backgroundTint="#757575"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

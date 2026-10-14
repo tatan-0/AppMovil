@@ -1,73 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="#FFFFFF">
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F5F5F5">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:text="MENÚ PRINCIPAL"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1976D2"
+        android:layout_marginBottom="32dp" />
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/logo_ina"
-            android:contentDescription="Logo" />
+    <Button
+        android:id="@+id/btnUserList"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="GESTIÓN DE USUARIOS"
+        android:backgroundTint="#1976D2"
+        android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/tvDateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fecha/Hora: --"
-            android:textSize="14sp"
-            android:textColor="#555555"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="32dp" />
+    <Button
+        android:id="@+id/btnSensors"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="SENSORES Y HARDWARE"
+        android:backgroundTint="#009688"
+        android:layout_marginBottom="16dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCrudUser"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="CRUD USUARIO"
-            android:backgroundTint="#FFFFFF"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:strokeColor="#E53935"
-            app:strokeWidth="2dp"
-            android:layout_marginBottom="16dp" />
+    <Button
+        android:id="@+id/btnDeveloper"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="DESARROLLADOR"
+        android:backgroundTint="#673AB7"
+        android:layout_marginBottom="32dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSensors"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="DATOS SENSOR"
-            android:backgroundTint="#FFFFFF"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:strokeColor="#E53935"
-            app:strokeWidth="2dp"
-            android:layout_marginBottom="16dp" />
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="CERRAR SESIÓN"
+        android:backgroundTint="#E53935" />
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeveloper"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="DESARROLLADOR"
-            android:backgroundTint="#FFFFFF"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:strokeColor="#E53935"
-            app:strokeWidth="2dp" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

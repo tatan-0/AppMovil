@@ -3,100 +3,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FFFFFF">
+    android:background="#F5F5F5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
-        android:gravity="center_horizontal">
-
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/logo_ina"
-            android:contentDescription="Logo" />
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="REGISTRO DE USUARIO"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_marginTop="16dp"
+            android:textColor="#1976D2"
             android:layout_marginBottom="24dp" />
 
         <EditText
-            android:id="@+id/etRegNombres"
+            android:id="@+id/etNombres"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="INGRESE NOMBRES"
-            android:inputType="textPersonName"
-            android:paddingHorizontal="16dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="#000000"
-            android:textColorHint="#777777"
+            android:hint="Nombres"
+            android:padding="12dp"
+            android:background="#FFFFFF"
             android:layout_marginBottom="12dp" />
 
         <EditText
-            android:id="@+id/etRegApellidos"
+            android:id="@+id/etApellidos"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="INGRESE APELLIDOS"
-            android:inputType="textPersonName"
-            android:paddingHorizontal="16dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="#000000"
-            android:textColorHint="#777777"
+            android:hint="Apellidos"
+            android:padding="12dp"
+            android:background="#FFFFFF"
             android:layout_marginBottom="12dp" />
 
         <EditText
-            android:id="@+id/etRegEmail"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="INGRESE E-MAIL"
+            android:hint="Correo Electrónico"
             android:inputType="textEmailAddress"
-            android:paddingHorizontal="16dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="#000000"
-            android:textColorHint="#777777"
+            android:padding="12dp"
+            android:background="#FFFFFF"
             android:layout_marginBottom="12dp" />
 
         <EditText
-            android:id="@+id/etRegPass"
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="INGRESE CLAVE"
+            android:hint="Contraseña"
             android:inputType="textPassword"
-            android:paddingHorizontal="16dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="#000000"
-            android:textColorHint="#777777"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/etRegRepeatPass"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="REPETIR CLAVE"
-            android:inputType="textPassword"
-            android:paddingHorizontal="16dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="#000000"
-            android:textColorHint="#777777"
+            android:padding="12dp"
+            android:background="#FFFFFF"
             android:layout_marginBottom="24dp" />
 
         <Button
-            android:id="@+id/btnRegistrar"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="REGISTRAR"
-            android:backgroundTint="#E53935"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold" />
+            android:text="REGISTRARSE"
+            android:backgroundTint="#1976D2"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>

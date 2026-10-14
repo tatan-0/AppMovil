@@ -11,24 +11,28 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var userRepository: UserRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val etEmail = findViewById<EditText>(R.id.etUser)
+        userRepository = UserRepository(this)
+
+        val etUser = findViewById<EditText>(R.id.etUser)
         val etPassword = findViewById<EditText>(R.id.etPassword)
-        val btnIngresar = findViewById<Button>(R.id.btnIngresar)
+        val btnLogin = findViewById<Button>(R.id.btnLogin)
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
-        btnIngresar.setOnClickListener {
-            val email = etEmail.text.toString().trim()
-            val pass = etPassword.text.toString().trim()
+        btnLogin.setOnClickListener {
+            val email = etUser.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-            if (email.isEmpty() || pass.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                     .setTitleText("Campos Obligatorios")
-                    .setContentText("Debe ingresar su usuario/email y contraseña.")
+                    .setContentText("Por favor complete todos los campos.")
                     .show()
                 return@setOnClickListener
             }
@@ -36,40 +40,45 @@ class LoginActivity : AppCompatActivity() {
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Formato Inválido")
-                    .setContentText("Por favor ingrese un formato de correo válido (ejemplo@dominio.com).")
+                    .setContentText("Ingrese un correo electrónico válido.")
                     .show()
                 return@setOnClickListener
             }
 
-            val user = UserRepository.findUserByEmail(email)
+            val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+            pDialog.titleText = "Validando credenciales..."
+            pDialog.setCancelable(false)
+            pDialog.show()
 
-            if (user != null && user.password == pass) {
-                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("¡Bienvenido!")
-                    .setContentText("Inicio de sesión exitoso.")
-                    .setConfirmClickListener { dialog ->
-                        dialog.dismissWithAnimation()
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                    .show()
-            } else {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Error de Acceso")
-                    .setContentText("Usuario o contraseña incorrectos.")
-                    .show()
-            }
+            userRepository.login(email, password,
+                onSuccess = { response ->
+                    pDialog.dismissWithAnimation()
+                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("¡Bienvenido!")
+                        .setContentText(response.optString("message", "Sesión iniciada."))
+                        .setConfirmClickListener { dialog ->
+                            dialog.dismissWithAnimation()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                        .show()
+                },
+                onError = { errorMsg ->
+                    pDialog.dismissWithAnimation()
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error de Ingreso")
+                        .setContentText(errorMsg)
+                        .show()
+                }
+            )
         }
 
         tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
 
         tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, RecoverPasswordActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RecoverPasswordActivity::class.java))
         }
     }
 }
