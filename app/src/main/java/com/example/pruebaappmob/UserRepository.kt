@@ -13,7 +13,7 @@ class UserRepository(private val context: Context) {
     private val queue = Volley.newRequestQueue(context)
 
     companion object {
-        const val BASE_URL = "http://18.234.44.123/"
+        const val BASE_URL = "http://3.80.229.192/"
     }
 
     // 1. INICIO DE SESIÓN

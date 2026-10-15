@@ -16,19 +16,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INFORMACIÓN DEL DESARROLLADOR"
+            android:text="INFORMACIÓN DE LOS DESARROLLADORES"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#333333"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="20dp" />
 
+        <!-- TARJETA 1: SEBASTIÁN OLAVE -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,11 +39,11 @@
                 android:gravity="center_horizontal">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@mipmap/ic_launcher_round"
-                    android:contentDescription="Avatar"
-                    android:layout_marginBottom="12dp" />
+                    android:id="@+id/imgDeveloper1"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/inacapillo" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,7 +100,7 @@
                     android:gravity="center">
 
                     <Button
-                        android:id="@+id/btnGithub"
+                        android:id="@+id/btnGithub1"
                         android:layout_width="0dp"
                         android:layout_height="45dp"
                         android:layout_weight="1"
@@ -109,7 +110,7 @@
                         android:textColor="#FFFFFF" />
 
                     <Button
-                        android:id="@+id/btnLinkedin"
+                        android:id="@+id/btnLinkedin1"
                         android:layout_width="0dp"
                         android:layout_height="45dp"
                         android:layout_weight="1"
@@ -122,13 +123,115 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- TARJETA 2: MATÍAS CORTÉS -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imgDeveloper2"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/inacapillo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Matías Cortés"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#1976D2"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rol: Desarrollador Móvil / Backend"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#388E3C"
+                    android:layout_marginBottom="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📧 Correo: matias.cortes@alumnos.cl"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎓 Carrera: Ingeniería en Ciberseguridad"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📱 Asignatura: Aplicaciones Móviles IoT"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btnGithub2"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="GITHUB"
+                        android:backgroundTint="#24292E"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btnLinkedin2"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="LINKEDIN"
+                        android:backgroundTint="#0A66C2"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- BOTÓN VOLVER AL MENÚ -->
         <Button
             android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="VOLVER AL MENÚ"
             android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 </ScrollView>

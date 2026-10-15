@@ -12,22 +12,40 @@ class DeveloperActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer)
 
-        val btnGithub = findViewById<Button>(R.id.btnGithub)
-        val btnLinkedin = findViewById<Button>(R.id.btnLinkedin)
+        // Botones Desarrollador 1 (Sebastián Olave)
+        val btnGithub1 = findViewById<Button>(R.id.btnGithub1)
+        val btnLinkedin1 = findViewById<Button>(R.id.btnLinkedin1)
+
+        // Botones Desarrollador 2 (Matías Cortés)
+        val btnGithub2 = findViewById<Button>(R.id.btnGithub2)
+        val btnLinkedin2 = findViewById<Button>(R.id.btnLinkedin2)
+
+        // Botón Volver al Menú
         val btnBack = findViewById<Button>(R.id.btnBack)
 
-        // Enlace activo a GitHub
-        btnGithub.setOnClickListener {
+        // Enlaces Desarrollador 1
+        btnGithub1.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com"))
             startActivity(intent)
         }
 
-        // Enlace activo a LinkedIn
-        btnLinkedin.setOnClickListener {
+        btnLinkedin1.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://linkedin.com"))
             startActivity(intent)
         }
 
+        // Enlaces Desarrollador 2
+        btnGithub2.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com"))
+            startActivity(intent)
+        }
+
+        btnLinkedin2.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://linkedin.com"))
+            startActivity(intent)
+        }
+
+        // Volver al menú principal
         btnBack.setOnClickListener {
             finish()
         }
